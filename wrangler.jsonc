@@ -15,6 +15,13 @@
 	},
 	"compatibility_flags": [
 		"nodejs_compat"
+	],
+	"d1_databases": [
+		{
+			"binding": "dearapplicant",
+			"database_name": "dearapplicant",
+			"database_id": "78e0fd53-f02f-4d10-8287-54abad88e1a9"
+		}
 	]
 	/**
 	 * Smart Placement
