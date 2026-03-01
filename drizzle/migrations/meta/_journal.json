@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1772324056258,
+      "tag": "0000_noisy_warbound",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1772325453237,
+      "tag": "0001_previous_thunderbird",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1772327434885,
+      "tag": "0002_wooden_cable",
+      "breakpoints": true
+    }
+  ]
+}
