@@ -1,17 +1,30 @@
 import type { Route } from "./+types/home";
-import { Welcome } from "../welcome/welcome";
+import { MotionWrapper } from "~/components/landing/motion-wrapper";
+import { Navbar } from "~/components/landing/navbar";
+import { Hero } from "~/components/landing/hero";
+import { Features } from "~/components/landing/features";
+import { HowItWorks } from "~/components/landing/how-it-works";
+import { FinalCta } from "~/components/landing/final-cta";
 
 export function meta({}: Route.MetaArgs) {
-  return [
-    { title: "New React Router App" },
-    { name: "description", content: "Welcome to React Router!" },
-  ];
+	return [
+		{ title: "Dear Applicant — Track Every Application. Land Your Dream Job." },
+		{
+			name: "description",
+			content:
+				"A kanban-style job application tracker to organize your job search and land your dream job.",
+		},
+	];
 }
 
-export function loader({ context }: Route.LoaderArgs) {
-  return { message: context.cloudflare.env.VALUE_FROM_CLOUDFLARE };
-}
-
-export default function Home({ loaderData }: Route.ComponentProps) {
-  return <Welcome message={loaderData.message} />;
+export default function Home() {
+	return (
+		<MotionWrapper>
+			<Navbar />
+			<Hero />
+			<Features />
+			<HowItWorks />
+			<FinalCta />
+		</MotionWrapper>
+	);
 }
