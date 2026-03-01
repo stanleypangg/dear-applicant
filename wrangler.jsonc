@@ -10,8 +10,8 @@
 	"vars": {
 		"VALUE_FROM_CLOUDFLARE": "Hello from Cloudflare",
 		"ORIGIN": "http://localhost:5173",
-		"GOOGLE_CLIENT_ID": "",
-		"MICROSOFT_CLIENT_ID": "",
+		"GOOGLE_CLIENT_ID": "186899373419-4dfkh5mlu7hctjtffp6u1r8lhqnlg1bj.apps.googleusercontent.com",
+		"MICROSOFT_CLIENT_ID": "290ef56d-ace4-47dc-b437-38b152cfefe2",
 		"MICROSOFT_TENANT_ID": "common"
 	},
 	"observability": {
