@@ -38,7 +38,7 @@ export default function Signup() {
 		handleResend: doResend,
 	} = useResendVerification(email, startCountdown);
 
-	async function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
+	async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
 		e.preventDefault();
 		setError("");
 
@@ -69,7 +69,7 @@ export default function Signup() {
 		}
 	}
 
-	async function handleResend() {
+	function handleResend() {
 		if (!canResend) return;
 		doResend();
 	}

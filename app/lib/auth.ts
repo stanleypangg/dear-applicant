@@ -47,7 +47,7 @@ export const auth = betterAuth({
 				from: env.EMAIL_FROM,
 				to: user.email,
 				subject: "Verify your email — dear applicant",
-				html: `<p>Hi ${escapeHtml(user.name)},</p><p>Click the link below to verify your email address:</p><p><a href="${url}">${url}</a></p>`,
+				html: `<p>Hi ${escapeHtml(user.name)},</p><p>Click the link below to verify your email address:</p><p><a href="${url}">${escapeHtml(url)}</a></p>`,
 			});
 		},
 	},

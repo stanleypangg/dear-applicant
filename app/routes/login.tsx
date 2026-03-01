@@ -34,13 +34,15 @@ export default function Login() {
 	const {
 		resendLoading,
 		resendError,
+		clearResendError,
 		handleResend: doResend,
 	} = useResendVerification(email, startCountdown);
 
-	async function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
+	async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
 		e.preventDefault();
 		setError("");
 		setEmailUnverified(false);
+		clearResendError();
 		setLoading(true);
 		try {
 			const { signIn } = await import("~/lib/auth.client");

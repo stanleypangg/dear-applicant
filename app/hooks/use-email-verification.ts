@@ -42,5 +42,7 @@ export function useResendVerification(
 		}
 	}, [email, startCountdown]);
 
-	return { resendLoading, resendError, handleResend };
+	const clearResendError = useCallback(() => setResendError(""), []);
+
+	return { resendLoading, resendError, clearResendError, handleResend };
 }
