@@ -9,7 +9,10 @@
 	"main": "./workers/app.ts",
 	"vars": {
 		"VALUE_FROM_CLOUDFLARE": "Hello from Cloudflare",
-		"ORIGIN": "http://localhost:5173"
+		"ORIGIN": "http://localhost:5173",
+		"GOOGLE_CLIENT_ID": "",
+		"MICROSOFT_CLIENT_ID": "",
+		"MICROSOFT_TENANT_ID": "common"
 	},
 	"observability": {
 		"enabled": true
