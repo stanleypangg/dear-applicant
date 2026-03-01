@@ -1,6 +1,10 @@
 import { useState } from "react";
-import { redirect, Link, useNavigate } from "react-router";
+import { redirect, Link } from "react-router";
 import { getOptionalSession } from "~/lib/auth.server";
+import {
+	useResendCountdown,
+	useResendVerification,
+} from "~/hooks/use-email-verification";
 import {
 	GoogleIcon,
 	MicrosoftIcon,
@@ -20,15 +24,21 @@ export async function loader({ request }: Route.LoaderArgs) {
 }
 
 export default function Signup() {
-	const navigate = useNavigate();
 	const [name, setName] = useState("");
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [confirmPassword, setConfirmPassword] = useState("");
 	const [error, setError] = useState("");
 	const [loading, setLoading] = useState(false);
+	const [signedUp, setSignedUp] = useState(false);
+	const { countdown, start: startCountdown, canResend } = useResendCountdown(60);
+	const {
+		resendLoading,
+		resendError,
+		handleResend: doResend,
+	} = useResendVerification(email, startCountdown);
 
-	async function handleSubmit(e: React.FormEvent) {
+	async function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
 		e.preventDefault();
 		setError("");
 
@@ -40,17 +50,28 @@ export default function Signup() {
 		setLoading(true);
 		try {
 			const { signUp } = await import("~/lib/auth.client");
-			const result = await signUp.email({ name, email, password });
+			const result = await signUp.email({
+				name,
+				email,
+				password,
+				callbackURL: "/dashboard",
+			});
 			if (result.error) {
 				setError(result.error.message ?? "Sign up failed");
 			} else {
-				navigate("/dashboard");
+				setSignedUp(true);
+				startCountdown();
 			}
 		} catch {
 			setError("Something went wrong. Please try again.");
 		} finally {
 			setLoading(false);
 		}
+	}
+
+	async function handleResend() {
+		if (!canResend) return;
+		doResend();
 	}
 
 	async function handleSocial(provider: "google" | "microsoft") {
@@ -63,6 +84,61 @@ export default function Signup() {
 			setError(`Failed to connect to ${provider}. Please try again.`);
 			setLoading(false);
 		}
+	}
+
+	if (signedUp) {
+		return (
+			<div className="min-h-screen flex flex-col items-center justify-center bg-stone-50 dark:bg-gray-950 px-4">
+				<div className="w-full max-w-sm animate-fade-in">
+					<h1 className="font-serif italic text-4xl text-center text-stone-800 dark:text-stone-200 mb-10">
+						dear applicant
+					</h1>
+
+					<div className="bg-white dark:bg-stone-900 rounded-2xl p-8 shadow-xs border border-stone-200/80 dark:border-stone-800 text-center">
+						<div className="text-4xl mb-4">&#9993;</div>
+						<h2 className="text-lg font-semibold text-stone-900 dark:text-stone-100 mb-2">
+							Check your email
+						</h2>
+						<p className="text-sm text-stone-600 dark:text-stone-400 mb-6">
+							We sent a verification link to{" "}
+							<span className="font-medium text-stone-800 dark:text-stone-200">
+								{email}
+							</span>
+							. Click the link to activate your account.
+						</p>
+
+						{(error || resendError) && (
+							<div className="mb-4 p-3 rounded-lg bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400 text-sm">
+								{error || resendError}
+							</div>
+						)}
+
+						<button
+							type="button"
+							onClick={handleResend}
+							disabled={!canResend || resendLoading}
+							className="w-full rounded-lg bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 text-stone-700 dark:text-stone-300 py-2.5 text-sm font-medium transition-colors disabled:opacity-50 cursor-pointer"
+						>
+							{resendLoading
+								? "Sending..."
+								: canResend
+									? "Resend verification email"
+									: `Resend in ${countdown}s`}
+						</button>
+					</div>
+
+					<p className="text-center text-sm text-stone-500 dark:text-stone-400 mt-6">
+						Already verified?{" "}
+						<Link
+							to="/login"
+							className="text-emerald-600 dark:text-emerald-500 hover:underline font-medium"
+						>
+							Sign in
+						</Link>
+					</p>
+				</div>
+			</div>
+		);
 	}
 
 	return (

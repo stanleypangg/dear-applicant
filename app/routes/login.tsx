@@ -2,6 +2,10 @@ import { useState } from "react";
 import { redirect, Link, useNavigate } from "react-router";
 import { getOptionalSession } from "~/lib/auth.server";
 import {
+	useResendCountdown,
+	useResendVerification,
+} from "~/hooks/use-email-verification";
+import {
 	GoogleIcon,
 	MicrosoftIcon,
 	inputClass,
@@ -25,16 +29,31 @@ export default function Login() {
 	const [password, setPassword] = useState("");
 	const [error, setError] = useState("");
 	const [loading, setLoading] = useState(false);
+	const [emailUnverified, setEmailUnverified] = useState(false);
+	const { countdown, start: startCountdown, canResend } = useResendCountdown(60);
+	const {
+		resendLoading,
+		resendError,
+		handleResend: doResend,
+	} = useResendVerification(email, startCountdown);
 
-	async function handleSubmit(e: React.FormEvent) {
+	async function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
 		e.preventDefault();
 		setError("");
+		setEmailUnverified(false);
 		setLoading(true);
 		try {
 			const { signIn } = await import("~/lib/auth.client");
 			const result = await signIn.email({ email, password });
 			if (result.error) {
-				setError(result.error.message ?? "Sign in failed");
+				if (
+					result.error.status === 403 &&
+					result.error.message?.includes("Email not verified")
+				) {
+					setEmailUnverified(true);
+				} else {
+					setError(result.error.message ?? "Sign in failed");
+				}
 			} else {
 				navigate("/dashboard");
 			}
@@ -43,6 +62,11 @@ export default function Login() {
 		} finally {
 			setLoading(false);
 		}
+	}
+
+	function handleResend() {
+		if (!canResend) return;
+		doResend();
 	}
 
 	async function handleSocial(provider: "google" | "microsoft") {
@@ -69,9 +93,30 @@ export default function Login() {
 						Sign in
 					</h2>
 
-					{error && (
+					{emailUnverified && (
+						<div className="mb-4 p-3 rounded-lg bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400 text-sm">
+							<p className="font-medium mb-1">Please verify your email first</p>
+							<p className="mb-3">
+								Check your inbox for a verification link, or resend it below.
+							</p>
+							<button
+								type="button"
+								onClick={handleResend}
+								disabled={!canResend || resendLoading}
+								className="w-full rounded-lg bg-amber-100 dark:bg-amber-900/50 hover:bg-amber-200 dark:hover:bg-amber-900/70 text-amber-800 dark:text-amber-300 py-2 text-sm font-medium transition-colors disabled:opacity-50 cursor-pointer"
+							>
+								{resendLoading
+									? "Sending..."
+									: canResend
+										? "Resend verification email"
+										: `Resend in ${countdown}s`}
+							</button>
+						</div>
+					)}
+
+					{(error || resendError) && (
 						<div className="mb-4 p-3 rounded-lg bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400 text-sm">
-							{error}
+							{error || resendError}
 						</div>
 					)}
 

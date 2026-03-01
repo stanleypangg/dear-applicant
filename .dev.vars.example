@@ -1,4 +1,5 @@
 BETTER_AUTH_SECRET=generate-a-random-secret-here
+RESEND_API_KEY=your-resend-api-key
 GOOGLE_CLIENT_ID=your-google-client-id
 GOOGLE_CLIENT_SECRET=your-google-client-secret
 MICROSOFT_CLIENT_ID=your-microsoft-client-id

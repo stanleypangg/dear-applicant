@@ -17,7 +17,8 @@
 		"isbot": "^5.1.31",
 		"react": "^19.1.1",
 		"react-dom": "^19.1.1",
-		"react-router": "^7.10.0"
+		"react-router": "^7.10.0",
+		"resend": "^6.9.3"
 	},
 	"devDependencies": {
 		"@cloudflare/vite-plugin": "^1.13.5",
