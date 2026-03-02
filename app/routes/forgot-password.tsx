@@ -26,11 +26,15 @@ export default function ForgotPassword() {
 		setLoading(true);
 		try {
 			const { authClient } = await import("~/lib/auth.client");
-			await authClient.requestPasswordReset({
+			const result = await authClient.requestPasswordReset({
 				email,
 				redirectTo: "/reset-password",
 			});
-			setSent(true);
+			if (result.error) {
+				setError(result.error.message ?? "Something went wrong. Please try again.");
+			} else {
+				setSent(true);
+			}
 		} catch {
 			setError("Something went wrong. Please try again.");
 		} finally {

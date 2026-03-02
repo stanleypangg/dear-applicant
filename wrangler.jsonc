@@ -11,9 +11,6 @@
 		"VALUE_FROM_CLOUDFLARE": "Hello from Cloudflare",
 		// Local dev default — set production value via Cloudflare dashboard
 		"ORIGIN": "http://localhost:5173",
-		"GOOGLE_CLIENT_ID": "186899373419-4dfkh5mlu7hctjtffp6u1r8lhqnlg1bj.apps.googleusercontent.com",
-		"MICROSOFT_CLIENT_ID": "290ef56d-ace4-47dc-b437-38b152cfefe2",
-		"MICROSOFT_TENANT_ID": "common",
 		"EMAIL_FROM": "onboarding@resend.dev"
 	},
 	"observability": {

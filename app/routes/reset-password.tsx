@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Link, useSearchParams, useNavigate } from "react-router";
+import { redirect, Link, useSearchParams } from "react-router";
+import { getOptionalSession } from "~/lib/auth.server";
 import { inputClass } from "~/components/auth-ui";
 import type { Route } from "./+types/reset-password";
 
@@ -7,9 +8,14 @@ export function meta({}: Route.MetaArgs) {
 	return [{ title: "Reset password — dear applicant" }];
 }
 
+export async function loader({ request }: Route.LoaderArgs) {
+	const session = await getOptionalSession(request);
+	if (session) throw redirect("/dashboard");
+	return null;
+}
+
 export default function ResetPassword() {
 	const [searchParams] = useSearchParams();
-	const navigate = useNavigate();
 	const token = searchParams.get("token");
 
 	const [newPassword, setNewPassword] = useState("");
@@ -62,13 +68,12 @@ export default function ResetPassword() {
 							Your password has been updated. You can now sign in with your
 							new password.
 						</p>
-						<button
-							type="button"
-							onClick={() => navigate("/login")}
-							className="w-full rounded-lg bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white py-2.5 text-sm font-medium transition-colors cursor-pointer"
+						<Link
+							to="/login"
+							className="inline-block w-full rounded-lg bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white py-2.5 text-sm font-medium transition-colors text-center"
 						>
 							Sign in
-						</button>
+						</Link>
 					</div>
 				</div>
 			</div>
@@ -163,6 +168,7 @@ export default function ResetPassword() {
 								value={confirmPassword}
 								onChange={(e) => setConfirmPassword(e.target.value)}
 								required
+								minLength={8}
 								autoComplete="new-password"
 								className={inputClass}
 							/>
