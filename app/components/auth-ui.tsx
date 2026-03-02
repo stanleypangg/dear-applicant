@@ -33,7 +33,7 @@ export function MicrosoftIcon() {
 }
 
 export const inputClass =
-	"w-full rounded-lg border border-stone-300 dark:border-stone-700 bg-white dark:bg-stone-800 px-3.5 py-2.5 text-sm text-stone-900 dark:text-stone-100 placeholder:text-stone-400 dark:placeholder:text-stone-500 outline-none focus:ring-2 focus:ring-emerald-600/30 focus:border-emerald-600 dark:focus:ring-emerald-500/30 dark:focus:border-emerald-500 transition-colors";
+	"w-full rounded-lg border border-warmgray-300 dark:border-warmgray-700 bg-white dark:bg-warmgray-800 px-3.5 py-2.5 text-sm text-warmgray-900 dark:text-warmgray-100 placeholder:text-warmgray-400 dark:placeholder:text-warmgray-500 outline-none focus:ring-2 focus:ring-teal-600/30 focus:border-teal-600 dark:focus:ring-teal-500/30 dark:focus:border-teal-500 transition-colors";
 
 export const socialBtnClass =
-	"flex items-center justify-center gap-2 rounded-lg border border-stone-300 dark:border-stone-700 bg-white dark:bg-stone-800 px-4 py-2.5 text-sm font-medium text-stone-700 dark:text-stone-300 hover:bg-stone-50 dark:hover:bg-stone-700 transition-colors cursor-pointer disabled:opacity-50";
+	"flex items-center justify-center gap-2 rounded-lg border border-warmgray-300 dark:border-warmgray-700 bg-white dark:bg-warmgray-800 px-4 py-2.5 text-sm font-medium text-warmgray-700 dark:text-warmgray-300 hover:bg-warmgray-50 dark:hover:bg-warmgray-700 transition-colors cursor-pointer disabled:opacity-50";

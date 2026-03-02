@@ -22,19 +22,19 @@ export default function AuthLayout({ loaderData }: Route.ComponentProps) {
 	}
 
 	return (
-		<div className="min-h-screen bg-stone-50 dark:bg-gray-950">
-			<header className="border-b border-stone-200 dark:border-stone-800 bg-white dark:bg-stone-900/80">
+		<div className="min-h-screen bg-warmgray-50 dark:bg-warmgray-950">
+			<header className="border-b border-warmgray-200 dark:border-warmgray-800 bg-white dark:bg-warmgray-900/80">
 				<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex items-center justify-between h-14">
-					<span className="font-serif italic text-xl text-stone-800 dark:text-stone-200">
+					<span className="font-serif italic text-xl text-warmgray-800 dark:text-warmgray-200">
 						dear applicant
 					</span>
 					<div className="flex items-center gap-4">
-						<span className="text-sm text-stone-500 dark:text-stone-400">
+						<span className="text-sm text-warmgray-500 dark:text-warmgray-400">
 							{user.email}
 						</span>
 						<button
 							onClick={handleSignOut}
-							className="text-sm text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 transition-colors cursor-pointer"
+							className="text-sm text-warmgray-400 hover:text-warmgray-700 dark:hover:text-warmgray-200 transition-colors cursor-pointer"
 						>
 							Sign out
 						</button>
