@@ -2,7 +2,7 @@ import type { BatchItem } from "drizzle-orm/batch";
 import { eq, asc, count } from "drizzle-orm";
 import { data } from "react-router";
 import { useFetcher } from "react-router";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useId } from "react";
 import { MoreHorizontal, Plus, Check } from "lucide-react";
 import { db } from "~/db";
 import { boardColumn, application } from "~/db/schema";
@@ -31,6 +31,7 @@ import {
 } from "~/components/ui/select";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
+import { Textarea } from "~/components/ui/textarea";
 import type { Route } from "./+types/dashboard";
 
 const DEFAULT_COLUMNS = [
@@ -497,22 +498,509 @@ function DeleteColumnDialog({
 }
 
 /* -------------------------------------------------------------------------- */
+/*  Currency Options                                                          */
+/* -------------------------------------------------------------------------- */
+
+const CURRENCY_OPTIONS = ["USD", "EUR", "GBP", "CAD", "AUD"] as const;
+
+/* -------------------------------------------------------------------------- */
+/*  Application Form Fields (shared between Add and Edit)                     */
+/* -------------------------------------------------------------------------- */
+
+function ApplicationFormFields({
+	idPrefix,
+	company,
+	setCompany,
+	role,
+	setRole,
+	url,
+	setUrl,
+	dateApplied,
+	setDateApplied,
+	salaryMin,
+	setSalaryMin,
+	salaryMax,
+	setSalaryMax,
+	salaryCurrency,
+	setSalaryCurrency,
+	notes,
+	setNotes,
+}: {
+	idPrefix: string;
+	company: string;
+	setCompany: (v: string) => void;
+	role: string;
+	setRole: (v: string) => void;
+	url: string;
+	setUrl: (v: string) => void;
+	dateApplied: string;
+	setDateApplied: (v: string) => void;
+	salaryMin: string;
+	setSalaryMin: (v: string) => void;
+	salaryMax: string;
+	setSalaryMax: (v: string) => void;
+	salaryCurrency: string;
+	setSalaryCurrency: (v: string) => void;
+	notes: string;
+	setNotes: (v: string) => void;
+}) {
+	return (
+		<>
+			<div className="space-y-2">
+				<Label htmlFor={`${idPrefix}-company`}>Company</Label>
+				<Input
+					id={`${idPrefix}-company`}
+					value={company}
+					onChange={(e) => setCompany(e.target.value)}
+					placeholder="e.g. Acme Corp"
+					required
+					autoFocus
+				/>
+			</div>
+			<div className="space-y-2">
+				<Label htmlFor={`${idPrefix}-role`}>Role</Label>
+				<Input
+					id={`${idPrefix}-role`}
+					value={role}
+					onChange={(e) => setRole(e.target.value)}
+					placeholder="e.g. Software Engineer"
+					required
+				/>
+			</div>
+			<div className="space-y-2">
+				<Label htmlFor={`${idPrefix}-url`}>URL</Label>
+				<Input
+					id={`${idPrefix}-url`}
+					value={url}
+					onChange={(e) => setUrl(e.target.value)}
+					placeholder="https://..."
+				/>
+			</div>
+			<div className="space-y-2">
+				<Label htmlFor={`${idPrefix}-date-applied`}>Date Applied</Label>
+				<Input
+					id={`${idPrefix}-date-applied`}
+					type="date"
+					value={dateApplied}
+					onChange={(e) => setDateApplied(e.target.value)}
+				/>
+			</div>
+			<div className="grid grid-cols-2 gap-4">
+				<div className="space-y-2">
+					<Label htmlFor={`${idPrefix}-salary-min`}>Salary Min</Label>
+					<Input
+						id={`${idPrefix}-salary-min`}
+						type="number"
+						value={salaryMin}
+						onChange={(e) => setSalaryMin(e.target.value)}
+						placeholder="e.g. 80000"
+					/>
+				</div>
+				<div className="space-y-2">
+					<Label htmlFor={`${idPrefix}-salary-max`}>Salary Max</Label>
+					<Input
+						id={`${idPrefix}-salary-max`}
+						type="number"
+						value={salaryMax}
+						onChange={(e) => setSalaryMax(e.target.value)}
+						placeholder="e.g. 120000"
+					/>
+				</div>
+			</div>
+			<div className="space-y-2">
+				<Label htmlFor={`${idPrefix}-currency`}>Currency</Label>
+				<Select value={salaryCurrency} onValueChange={setSalaryCurrency}>
+					<SelectTrigger className="w-full" id={`${idPrefix}-currency`}>
+						<SelectValue />
+					</SelectTrigger>
+					<SelectContent>
+						{CURRENCY_OPTIONS.map((c) => (
+							<SelectItem key={c} value={c}>
+								{c}
+							</SelectItem>
+						))}
+					</SelectContent>
+				</Select>
+			</div>
+			<div className="space-y-2">
+				<Label htmlFor={`${idPrefix}-notes`}>Notes</Label>
+				<Textarea
+					id={`${idPrefix}-notes`}
+					value={notes}
+					onChange={(e) => setNotes(e.target.value)}
+					placeholder="Any additional notes..."
+					rows={3}
+				/>
+			</div>
+		</>
+	);
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Add Application Dialog                                                    */
+/* -------------------------------------------------------------------------- */
+
+function AddApplicationDialog({
+	open,
+	onOpenChange,
+	columnId,
+}: {
+	open: boolean;
+	onOpenChange: (open: boolean) => void;
+	columnId: string;
+}) {
+	const formId = useId();
+	const fetcher = useFetcher();
+	const [company, setCompany] = useState("");
+	const [role, setRole] = useState("");
+	const [url, setUrl] = useState("");
+	const [dateApplied, setDateApplied] = useState("");
+	const [salaryMin, setSalaryMin] = useState("");
+	const [salaryMax, setSalaryMax] = useState("");
+	const [salaryCurrency, setSalaryCurrency] = useState("USD");
+	const [notes, setNotes] = useState("");
+	const wasSubmitting = useRef(false);
+
+	const isSubmitting = fetcher.state !== "idle";
+
+	// Close dialog on successful submission
+	useEffect(() => {
+		if (fetcher.state !== "idle") {
+			wasSubmitting.current = true;
+		}
+		if (wasSubmitting.current && fetcher.state === "idle" && fetcher.data && !("error" in fetcher.data)) {
+			wasSubmitting.current = false;
+			onOpenChange(false);
+			setCompany("");
+			setRole("");
+			setUrl("");
+			setDateApplied("");
+			setSalaryMin("");
+			setSalaryMax("");
+			setSalaryCurrency("USD");
+			setNotes("");
+		}
+	}, [fetcher.state, fetcher.data, onOpenChange]);
+
+	function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+		e.preventDefault();
+		if (!company.trim() || !role.trim()) return;
+
+		const formData: Record<string, string> = {
+			intent: "create",
+			columnId,
+			company: company.trim(),
+			role: role.trim(),
+		};
+		if (url.trim()) formData.url = url.trim();
+		if (dateApplied) formData.dateApplied = dateApplied;
+		if (salaryMin) formData.salaryMin = salaryMin;
+		if (salaryMax) formData.salaryMax = salaryMax;
+		if (salaryCurrency !== "USD") formData.salaryCurrency = salaryCurrency;
+		if (notes.trim()) formData.notes = notes.trim();
+
+		fetcher.submit(formData, {
+			method: "POST",
+			action: "/dashboard/applications",
+		});
+	}
+
+	return (
+		<Dialog open={open} onOpenChange={onOpenChange}>
+			<DialogContent className="max-h-[85vh] overflow-y-auto">
+				<DialogHeader>
+					<DialogTitle>Add Application</DialogTitle>
+					<DialogDescription>
+						Track a new job application.
+					</DialogDescription>
+				</DialogHeader>
+				<form onSubmit={handleSubmit} className="space-y-4">
+					<ApplicationFormFields
+						idPrefix={formId}
+						company={company}
+						setCompany={setCompany}
+						role={role}
+						setRole={setRole}
+						url={url}
+						setUrl={setUrl}
+						dateApplied={dateApplied}
+						setDateApplied={setDateApplied}
+						salaryMin={salaryMin}
+						setSalaryMin={setSalaryMin}
+						salaryMax={salaryMax}
+						setSalaryMax={setSalaryMax}
+						salaryCurrency={salaryCurrency}
+						setSalaryCurrency={setSalaryCurrency}
+						notes={notes}
+						setNotes={setNotes}
+					/>
+					{fetcher.data && "error" in fetcher.data && (
+						<p className="text-sm text-red-600">
+							{String(fetcher.data.error)}
+						</p>
+					)}
+					<DialogFooter>
+						<Button type="submit" disabled={isSubmitting || !company.trim() || !role.trim()}>
+							{isSubmitting ? "Saving..." : "Add Application"}
+						</Button>
+					</DialogFooter>
+				</form>
+			</DialogContent>
+		</Dialog>
+	);
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Delete Application Confirm Dialog                                         */
+/* -------------------------------------------------------------------------- */
+
+function DeleteApplicationDialog({
+	open,
+	onOpenChange,
+	applicationId,
+	company,
+	role,
+	onDeleted,
+}: {
+	open: boolean;
+	onOpenChange: (open: boolean) => void;
+	applicationId: string;
+	company: string;
+	role: string;
+	onDeleted: () => void;
+}) {
+	const fetcher = useFetcher();
+	const wasSubmitting = useRef(false);
+
+	const isSubmitting = fetcher.state !== "idle";
+
+	// Close both dialogs on successful deletion
+	useEffect(() => {
+		if (fetcher.state !== "idle") {
+			wasSubmitting.current = true;
+		}
+		if (wasSubmitting.current && fetcher.state === "idle" && fetcher.data && !("error" in fetcher.data)) {
+			wasSubmitting.current = false;
+			onOpenChange(false);
+			onDeleted();
+		}
+	}, [fetcher.state, fetcher.data, onOpenChange, onDeleted]);
+
+	function handleDelete() {
+		fetcher.submit(
+			{ intent: "delete", applicationId },
+			{ method: "POST", action: "/dashboard/applications" },
+		);
+	}
+
+	return (
+		<Dialog open={open} onOpenChange={onOpenChange}>
+			<DialogContent>
+				<DialogHeader>
+					<DialogTitle>Delete Application</DialogTitle>
+					<DialogDescription>
+						Are you sure you want to delete the application for &ldquo;{role}&rdquo; at &ldquo;{company}&rdquo;? This action cannot be undone.
+					</DialogDescription>
+				</DialogHeader>
+				{fetcher.data && "error" in fetcher.data && (
+					<p className="text-sm text-red-600">
+						{String(fetcher.data.error)}
+					</p>
+				)}
+				<DialogFooter>
+					<Button variant="outline" onClick={() => onOpenChange(false)}>
+						Cancel
+					</Button>
+					<Button
+						variant="destructive"
+						onClick={handleDelete}
+						disabled={isSubmitting}
+					>
+						{isSubmitting ? "Deleting..." : "Delete"}
+					</Button>
+				</DialogFooter>
+			</DialogContent>
+		</Dialog>
+	);
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Edit Application Dialog                                                   */
+/* -------------------------------------------------------------------------- */
+
+function EditApplicationDialog({
+	open,
+	onOpenChange,
+	application: app,
+}: {
+	open: boolean;
+	onOpenChange: (open: boolean) => void;
+	application: Application;
+}) {
+	const formId = useId();
+	const fetcher = useFetcher();
+	const [company, setCompany] = useState(app.company);
+	const [role, setRole] = useState(app.role);
+	const [url, setUrl] = useState(app.url ?? "");
+	const [dateApplied, setDateApplied] = useState(
+		app.dateApplied ? new Date(app.dateApplied).toISOString().split("T")[0] : "",
+	);
+	const [salaryMin, setSalaryMin] = useState(
+		app.salaryMin != null ? String(app.salaryMin) : "",
+	);
+	const [salaryMax, setSalaryMax] = useState(
+		app.salaryMax != null ? String(app.salaryMax) : "",
+	);
+	const [salaryCurrency, setSalaryCurrency] = useState(app.salaryCurrency);
+	const [notes, setNotes] = useState(app.notes ?? "");
+	const [deleteOpen, setDeleteOpen] = useState(false);
+	const wasSubmitting = useRef(false);
+
+	const isSubmitting = fetcher.state !== "idle";
+
+	// Reset form fields when dialog opens with different application
+	useEffect(() => {
+		if (open) {
+			setCompany(app.company);
+			setRole(app.role);
+			setUrl(app.url ?? "");
+			setDateApplied(
+				app.dateApplied ? new Date(app.dateApplied).toISOString().split("T")[0] : "",
+			);
+			setSalaryMin(app.salaryMin != null ? String(app.salaryMin) : "");
+			setSalaryMax(app.salaryMax != null ? String(app.salaryMax) : "");
+			setSalaryCurrency(app.salaryCurrency);
+			setNotes(app.notes ?? "");
+		}
+	}, [open, app.id]);
+
+	// Close dialog on successful submission
+	useEffect(() => {
+		if (fetcher.state !== "idle") {
+			wasSubmitting.current = true;
+		}
+		if (wasSubmitting.current && fetcher.state === "idle" && fetcher.data && !("error" in fetcher.data)) {
+			wasSubmitting.current = false;
+			onOpenChange(false);
+		}
+	}, [fetcher.state, fetcher.data, onOpenChange]);
+
+	const handleDeleted = useRef(() => {
+		onOpenChange(false);
+	}).current;
+
+	function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+		e.preventDefault();
+		if (!company.trim() || !role.trim()) return;
+
+		const formData: Record<string, string> = {
+			intent: "update",
+			applicationId: app.id,
+			company: company.trim(),
+			role: role.trim(),
+			url: url.trim(),
+			dateApplied,
+			salaryMin,
+			salaryMax,
+			salaryCurrency,
+			notes: notes.trim(),
+		};
+
+		fetcher.submit(formData, {
+			method: "POST",
+			action: "/dashboard/applications",
+		});
+	}
+
+	return (
+		<>
+			<Dialog open={open} onOpenChange={onOpenChange}>
+				<DialogContent className="max-h-[85vh] overflow-y-auto">
+					<DialogHeader>
+						<DialogTitle>Edit Application</DialogTitle>
+						<DialogDescription>
+							Update details for this application.
+						</DialogDescription>
+					</DialogHeader>
+					<form onSubmit={handleSubmit} className="space-y-4">
+						<ApplicationFormFields
+							idPrefix={formId}
+							company={company}
+							setCompany={setCompany}
+							role={role}
+							setRole={setRole}
+							url={url}
+							setUrl={setUrl}
+							dateApplied={dateApplied}
+							setDateApplied={setDateApplied}
+							salaryMin={salaryMin}
+							setSalaryMin={setSalaryMin}
+							salaryMax={salaryMax}
+							setSalaryMax={setSalaryMax}
+							salaryCurrency={salaryCurrency}
+							setSalaryCurrency={setSalaryCurrency}
+							notes={notes}
+							setNotes={setNotes}
+						/>
+						{fetcher.data && "error" in fetcher.data && (
+							<p className="text-sm text-red-600">
+								{String(fetcher.data.error)}
+							</p>
+						)}
+						<DialogFooter className="flex justify-between sm:justify-between">
+							<Button
+								type="button"
+								variant="destructive"
+								onClick={() => setDeleteOpen(true)}
+							>
+								Delete
+							</Button>
+							<Button type="submit" disabled={isSubmitting || !company.trim() || !role.trim()}>
+								{isSubmitting ? "Saving..." : "Save Changes"}
+							</Button>
+						</DialogFooter>
+					</form>
+				</DialogContent>
+			</Dialog>
+			<DeleteApplicationDialog
+				open={deleteOpen}
+				onOpenChange={setDeleteOpen}
+				applicationId={app.id}
+				company={app.company}
+				role={app.role}
+				onDeleted={handleDeleted}
+			/>
+		</>
+	);
+}
+
+/* -------------------------------------------------------------------------- */
 /*  Application Card                                                          */
 /* -------------------------------------------------------------------------- */
 
 function ApplicationCard({
 	app,
 	colorHex,
+	onClick,
 }: {
 	app: Application;
 	colorHex: string;
+	onClick: () => void;
 }) {
 	return (
 		<div
 			role="button"
+			tabIndex={0}
 			aria-label={`${app.company}, ${app.role}`}
 			className="rounded-lg border bg-white dark:bg-warmgray-800 p-3 cursor-pointer hover:border-warmgray-300 dark:hover:border-warmgray-600 transition-colors"
 			style={{ borderLeft: `3px solid ${colorHex}` }}
+			onClick={onClick}
+			onKeyDown={(e) => {
+				if (e.key === "Enter" || e.key === " ") {
+					e.preventDefault();
+					onClick();
+				}
+			}}
 		>
 			<p className="text-sm font-medium text-warmgray-900 dark:text-warmgray-100 truncate">
 				{app.company}
@@ -540,6 +1028,8 @@ function KanbanColumn({
 	const [renameOpen, setRenameOpen] = useState(false);
 	const [colorOpen, setColorOpen] = useState(false);
 	const [deleteOpen, setDeleteOpen] = useState(false);
+	const [addAppOpen, setAddAppOpen] = useState(false);
+	const [editApp, setEditApp] = useState<Application | null>(null);
 
 	return (
 		<section
@@ -591,13 +1081,19 @@ function KanbanColumn({
 						<button
 							type="button"
 							className="mt-2 text-xs text-teal-700 dark:text-teal-500 hover:underline"
+							onClick={() => setAddAppOpen(true)}
 						>
 							Add one
 						</button>
 					</div>
 				) : (
 					column.applications.map((app) => (
-						<ApplicationCard key={app.id} app={app} colorHex={colorHex} />
+						<ApplicationCard
+							key={app.id}
+							app={app}
+							colorHex={colorHex}
+							onClick={() => setEditApp(app)}
+						/>
 					))
 				)}
 			</div>
@@ -608,6 +1104,7 @@ function KanbanColumn({
 					variant="ghost"
 					size="sm"
 					className="w-full justify-start text-warmgray-500 hover:text-warmgray-700 dark:text-warmgray-400 dark:hover:text-warmgray-200"
+					onClick={() => setAddAppOpen(true)}
 				>
 					<Plus className="size-4" />
 					Add
@@ -631,6 +1128,22 @@ function KanbanColumn({
 				column={column}
 				allColumns={allColumns}
 			/>
+
+			{/* Application dialogs */}
+			<AddApplicationDialog
+				open={addAppOpen}
+				onOpenChange={setAddAppOpen}
+				columnId={column.id}
+			/>
+			{editApp && (
+				<EditApplicationDialog
+					open={editApp !== null}
+					onOpenChange={(open) => {
+						if (!open) setEditApp(null);
+					}}
+					application={editApp}
+				/>
+			)}
 		</section>
 	);
 }
