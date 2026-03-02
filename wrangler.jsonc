@@ -9,7 +9,9 @@
 	"main": "./workers/app.ts",
 	"vars": {
 		"VALUE_FROM_CLOUDFLARE": "Hello from Cloudflare",
-		"ORIGIN": "http://localhost:5173"
+		// Local dev default — set production value via Cloudflare dashboard
+		"ORIGIN": "http://localhost:5173",
+		"EMAIL_FROM": "onboarding@resend.dev"
 	},
 	"observability": {
 		"enabled": true
