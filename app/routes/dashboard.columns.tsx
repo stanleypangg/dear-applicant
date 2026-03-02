@@ -38,6 +38,7 @@ async function handleCreate(userId: string, formData: FormData) {
 		return data({ error: "Color is required" }, { status: 400 });
 	}
 
+	// Racy if two creates hit simultaneously, but D1 batch isn't atomic anyway
 	const [{ value: position }] = await db
 		.select({ value: count() })
 		.from(boardColumn)
@@ -160,16 +161,16 @@ async function handleDelete(userId: string, formData: FormData) {
 
 		// Move each app with incrementing positions, then delete column
 		const now = new Date();
-		const statements = appsToMove.map((app, i) =>
+		const statements: BatchItem<"sqlite">[] = appsToMove.map((app, i) =>
 			db.update(application)
 				.set({ columnId: destinationColumnId, position: destAppCount + i, updatedAt: now })
 				.where(eq(application.id, app.id)),
 		);
 		statements.push(
-			db.delete(boardColumn).where(eq(boardColumn.id, columnId)) as any,
+			db.delete(boardColumn).where(eq(boardColumn.id, columnId)),
 		);
 		await db.batch(
-			statements as unknown as [BatchItem<"sqlite">, ...BatchItem<"sqlite">[]],
+			statements as [BatchItem<"sqlite">, ...BatchItem<"sqlite">[]],
 		);
 	} else {
 		await db.delete(boardColumn).where(eq(boardColumn.id, columnId));

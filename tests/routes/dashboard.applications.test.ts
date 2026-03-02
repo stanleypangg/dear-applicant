@@ -447,6 +447,53 @@ describe("update application", () => {
 		expect(status).toBe(400);
 	});
 
+	it("returns 400 when only salaryMin sent and exceeds existing salaryMax", async () => {
+		// DB has salaryMax: 120000 from beforeEach seed
+		const { status, body } = await callAction({
+			intent: "update",
+			applicationId: appId,
+			salaryMin: "200000",
+		});
+		expect(status).toBe(400);
+		expect(body.error).toMatch(/salaryMin/i);
+	});
+
+	it("returns 400 when only salaryMax sent and below existing salaryMin", async () => {
+		// DB has salaryMin: 80000 from beforeEach seed
+		const { status, body } = await callAction({
+			intent: "update",
+			applicationId: appId,
+			salaryMax: "50000",
+		});
+		expect(status).toBe(400);
+		expect(body.error).toMatch(/salaryMin/i);
+	});
+
+	it("allows partial salary update when result is valid", async () => {
+		// DB has salaryMin: 80000, salaryMax: 120000
+		const { status } = await callAction({
+			intent: "update",
+			applicationId: appId,
+			salaryMin: "100000",
+		});
+		expect(status).toBe(200);
+		const app = getApplicationById(db, appId);
+		expect(app!.salaryMin).toBe(100000);
+		expect(app!.salaryMax).toBe(120000);
+	});
+
+	it("allows clearing salaryMin even when salaryMax exists", async () => {
+		const { status } = await callAction({
+			intent: "update",
+			applicationId: appId,
+			salaryMin: "",
+		});
+		expect(status).toBe(200);
+		const app = getApplicationById(db, appId);
+		expect(app!.salaryMin).toBeNull();
+		expect(app!.salaryMax).toBe(120000);
+	});
+
 	it("sets updatedAt on update", async () => {
 		const before = getApplicationById(db, appId)!.updatedAt;
 

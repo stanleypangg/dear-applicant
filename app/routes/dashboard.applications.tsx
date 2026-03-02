@@ -52,7 +52,7 @@ async function handleCreate(userId: string, formData: FormData) {
 		return data({ error: "Column not found" }, { status: 404 });
 	}
 
-	// Count apps in column for position
+	// Count apps in column for position (racy if two creates hit simultaneously, but D1 batch isn't atomic anyway)
 	const [{ value: position }] = await db
 		.select({ value: count() })
 		.from(application)
@@ -133,9 +133,13 @@ async function handleUpdate(userId: string, formData: FormData) {
 		return data({ error: "applicationId is required" }, { status: 400 });
 	}
 
-	// Verify ownership
+	// Verify ownership and fetch current salary values for cross-validation
 	const [app] = await db
-		.select({ id: application.id })
+		.select({
+			id: application.id,
+			salaryMin: application.salaryMin,
+			salaryMax: application.salaryMax,
+		})
 		.from(application)
 		.where(
 			and(eq(application.id, applicationId), eq(application.userId, userId)),
@@ -212,11 +216,13 @@ async function handleUpdate(userId: string, formData: FormData) {
 		updates.notes = typeof v === "string" && v.trim() ? v.trim() : null;
 	}
 
-	// Cross-field salary validation
+	// Cross-field salary validation (merge with existing DB values)
+	const effectiveMin = updates.salaryMin !== undefined ? updates.salaryMin : app.salaryMin;
+	const effectiveMax = updates.salaryMax !== undefined ? updates.salaryMax : app.salaryMax;
 	if (
-		typeof updates.salaryMin === "number" &&
-		typeof updates.salaryMax === "number" &&
-		updates.salaryMin > updates.salaryMax
+		typeof effectiveMin === "number" &&
+		typeof effectiveMax === "number" &&
+		effectiveMin > effectiveMax
 	) {
 		return data({ error: "salaryMin must be <= salaryMax" }, { status: 400 });
 	}
@@ -313,7 +319,7 @@ async function handleMove(userId: string, formData: FormData) {
 		const sourceApps = await db
 			.select({ id: application.id })
 			.from(application)
-			.where(and(eq(application.columnId, fromColumnId)))
+			.where(eq(application.columnId, fromColumnId))
 			.orderBy(asc(application.position));
 
 		const filteredSourceApps = sourceApps.filter((a) => a.id !== applicationId);
