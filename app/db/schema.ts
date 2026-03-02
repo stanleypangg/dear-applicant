@@ -25,7 +25,7 @@ export const application = sqliteTable("application", {
 		.references(() => user.id, { onDelete: "cascade" }),
 	columnId: text("column_id")
 		.notNull()
-		.references(() => boardColumn.id, { onDelete: "cascade" }),
+		.references(() => boardColumn.id, { onDelete: "restrict" }),
 	company: text("company").notNull(),
 	role: text("role").notNull(),
 	url: text("url"),
