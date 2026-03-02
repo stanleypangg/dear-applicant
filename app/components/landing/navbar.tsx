@@ -16,20 +16,20 @@ export function Navbar() {
 			<nav
 				className={`flex items-center justify-between w-full max-w-5xl px-5 py-2.5 rounded-full transition-all duration-300 ${
 					scrolled
-						? "bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg shadow-sm shadow-gray-200/50 dark:shadow-gray-900/50"
+						? "bg-white/80 dark:bg-warmgray-900/80 backdrop-blur-lg shadow-sm shadow-warmgray-200/50 dark:shadow-warmgray-900/50"
 						: "bg-transparent"
 				}`}
 			>
 				<Link
 					to="/"
-					className="text-lg font-semibold text-gray-900 dark:text-white tracking-tight"
+					className="text-lg font-semibold text-warmgray-900 dark:text-white tracking-tight"
 				>
 					dear applicant
 				</Link>
 
 				<a
 					href="#features"
-					className="hidden md:block text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+					className="hidden md:block text-sm text-warmgray-600 dark:text-warmgray-400 hover:text-warmgray-900 dark:hover:text-white transition-colors"
 				>
 					Features
 				</a>
@@ -37,14 +37,14 @@ export function Navbar() {
 				<div className="flex items-center gap-3">
 					<Link
 						to="/sign-in"
-						className="hidden sm:block text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+						className="hidden sm:block text-sm text-warmgray-600 dark:text-warmgray-400 hover:text-warmgray-900 dark:hover:text-white transition-colors"
 					>
 						Sign In
 					</Link>
 					<m.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
 						<Link
 							to="/sign-up"
-							className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-emerald-500 hover:bg-emerald-600 rounded-full transition-colors"
+							className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-teal-500 hover:bg-teal-600 rounded-full transition-colors"
 						>
 							Get Started
 						</Link>

@@ -14,5 +14,7 @@ export default [
 	route("api/auth/*", "routes/api.auth.$.tsx"),
 	layout("routes/layout.auth.tsx", [
 		route("dashboard", "routes/dashboard.tsx"),
+		route("dashboard/columns", "routes/dashboard.columns.tsx"),
+		route("dashboard/applications", "routes/dashboard.applications.tsx"),
 	]),
 ] satisfies RouteConfig;

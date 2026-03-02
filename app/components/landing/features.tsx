@@ -88,10 +88,10 @@ export function Features() {
 		<section id="features" className="py-24 md:py-32">
 			<div className="mx-auto max-w-6xl px-6">
 				<ScrollReveal>
-					<h2 className="text-3xl font-bold text-center text-gray-900 dark:text-white sm:text-4xl">
+					<h2 className="text-3xl font-bold text-center text-warmgray-900 dark:text-white sm:text-4xl">
 						Everything you need to stay organized
 					</h2>
-					<p className="mt-4 text-center text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+					<p className="mt-4 text-center text-warmgray-600 dark:text-warmgray-400 max-w-2xl mx-auto">
 						Built specifically for job seekers who want to take control of their
 						search.
 					</p>
@@ -99,14 +99,14 @@ export function Features() {
 				<div className="mt-16 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
 					{features.map((feature, i) => (
 						<ScrollReveal key={feature.title} delay={i * 0.1}>
-							<div className="group rounded-2xl border border-gray-200 dark:border-gray-800 p-6 transition-shadow hover:shadow-lg hover:shadow-emerald-500/5">
-								<div className="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-50 dark:bg-emerald-950/50 text-emerald-500">
+							<div className="group rounded-2xl border border-warmgray-200 dark:border-warmgray-800 p-6 transition-shadow hover:shadow-lg hover:shadow-teal-500/5">
+								<div className="flex h-10 w-10 items-center justify-center rounded-lg bg-teal-50 dark:bg-teal-950/50 text-teal-500">
 									{feature.icon}
 								</div>
-								<h3 className="mt-4 text-lg font-semibold text-gray-900 dark:text-white">
+								<h3 className="mt-4 text-lg font-semibold text-warmgray-900 dark:text-white">
 									{feature.title}
 								</h3>
-								<p className="mt-2 text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+								<p className="mt-2 text-sm text-warmgray-600 dark:text-warmgray-400 leading-relaxed">
 									{feature.description}
 								</p>
 							</div>

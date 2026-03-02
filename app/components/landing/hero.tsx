@@ -11,16 +11,16 @@ export function Hero() {
 					initial={{ opacity: 0, y: 24 }}
 					animate={{ opacity: 1, y: 0 }}
 					transition={{ duration: 0.6, delay: 0.1 }}
-					className="text-4xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-5xl md:text-6xl"
+					className="text-4xl font-bold tracking-tight text-warmgray-900 dark:text-white sm:text-5xl md:text-6xl"
 				>
 					Track Every Application.{" "}
-					<span className="text-emerald-500">Land Your Dream Job.</span>
+					<span className="text-teal-500">Land Your Dream Job.</span>
 				</m.h1>
 				<m.p
 					initial={{ opacity: 0, y: 24 }}
 					animate={{ opacity: 1, y: 0 }}
 					transition={{ duration: 0.6, delay: 0.2 }}
-					className="mt-6 text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto leading-relaxed"
+					className="mt-6 text-lg text-warmgray-600 dark:text-warmgray-400 max-w-2xl mx-auto leading-relaxed"
 				>
 					Stop losing track of where you applied. Organize your entire job
 					search with a visual kanban board built for applicants.
@@ -38,7 +38,7 @@ export function Hero() {
 					>
 						<Link
 							to="/sign-up"
-							className="inline-flex items-center px-8 py-3.5 text-base font-medium text-white bg-emerald-500 hover:bg-emerald-600 rounded-full transition-colors shadow-lg shadow-emerald-500/25"
+							className="inline-flex items-center px-8 py-3.5 text-base font-medium text-white bg-teal-500 hover:bg-teal-600 rounded-full transition-colors shadow-lg shadow-teal-500/25"
 						>
 							Get Started &mdash; It&apos;s Free
 						</Link>

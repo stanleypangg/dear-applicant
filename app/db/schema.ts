@@ -1,4 +1,4 @@
-import { sqliteTable, text, integer, index } from "drizzle-orm/sqlite-core";
+import { sqliteTable, text, integer, index, uniqueIndex } from "drizzle-orm/sqlite-core";
 import { relations } from "drizzle-orm";
 import { user } from "./auth-schema";
 
@@ -25,7 +25,7 @@ export const application = sqliteTable("application", {
 		.references(() => user.id, { onDelete: "cascade" }),
 	columnId: text("column_id")
 		.notNull()
-		.references(() => boardColumn.id, { onDelete: "cascade" }),
+		.references(() => boardColumn.id, { onDelete: "restrict" }),
 	company: text("company").notNull(),
 	role: text("role").notNull(),
 	url: text("url"),
@@ -73,6 +73,27 @@ export const columnTransition = sqliteTable("column_transition", {
 	index("column_transition_application_id_idx").on(table.applicationId),
 	index("column_transition_from_column_id_idx").on(table.fromColumnId),
 	index("column_transition_to_column_id_idx").on(table.toColumnId),
+]);
+
+// Job board listings — synced from external sources
+export const jobListing = sqliteTable("job_listing", {
+	id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),
+	source: text("source").notNull(),
+	sourceId: text("source_id").notNull(),
+	company: text("company").notNull(),
+	title: text("title").notNull(),
+	locations: text("locations").notNull(), // JSON array as string
+	url: text("url").notNull(),
+	category: text("category"),
+	sponsorship: text("sponsorship"),
+	active: integer("active", { mode: "boolean" }).notNull().default(true),
+	datePosted: integer("date_posted", { mode: "timestamp" }),
+	createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
+	updatedAt: integer("updated_at", { mode: "timestamp" }).notNull(),
+}, (table) => [
+	uniqueIndex("job_listing_source_source_id_uniq").on(table.source, table.sourceId),
+	index("job_listing_company_idx").on(table.company),
+	index("job_listing_active_idx").on(table.active),
 ]);
 
 // Relations

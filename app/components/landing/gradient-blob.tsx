@@ -20,9 +20,9 @@ export function GradientBlob() {
 						x2="100%"
 						y2="100%"
 					>
-						<stop offset="0%" stopColor="#10b981" />
-						<stop offset="50%" stopColor="#34d399" />
-						<stop offset="100%" stopColor="#6ee7b7" />
+						<stop offset="0%" stopColor="#14B8A6" />
+						<stop offset="50%" stopColor="#2DD4BF" />
+						<stop offset="100%" stopColor="#5EEAD4" />
 					</linearGradient>
 				</defs>
 				<path fill="url(#blob-gradient)" d={blob1}>

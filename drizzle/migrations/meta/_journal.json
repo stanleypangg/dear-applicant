@@ -22,6 +22,20 @@
       "when": 1772327434885,
       "tag": "0002_wooden_cable",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1772414978288,
+      "tag": "0003_mighty_kid_colt",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1772434299626,
+      "tag": "0004_useful_wrecking_crew",
+      "breakpoints": true
     }
   ]
 }

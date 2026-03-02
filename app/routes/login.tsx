@@ -84,14 +84,14 @@ export default function Login() {
 	}
 
 	return (
-		<div className="min-h-screen flex flex-col items-center justify-center bg-stone-50 dark:bg-gray-950 px-4">
+		<div className="min-h-screen flex flex-col items-center justify-center bg-warmgray-50 dark:bg-warmgray-950 px-4">
 			<div className="w-full max-w-sm animate-fade-in">
-				<h1 className="font-serif italic text-4xl text-center text-stone-800 dark:text-stone-200 mb-10">
+				<h1 className="font-serif italic text-4xl text-center text-warmgray-800 dark:text-warmgray-200 mb-10">
 					dear applicant
 				</h1>
 
-				<div className="bg-white dark:bg-stone-900 rounded-2xl p-8 shadow-xs border border-stone-200/80 dark:border-stone-800">
-					<h2 className="text-lg font-semibold text-stone-900 dark:text-stone-100 mb-6">
+				<div className="bg-white dark:bg-warmgray-900 rounded-2xl p-8 shadow-xs border border-warmgray-200/80 dark:border-warmgray-800">
+					<h2 className="text-lg font-semibold text-warmgray-900 dark:text-warmgray-100 mb-6">
 						Sign in
 					</h2>
 
@@ -126,7 +126,7 @@ export default function Login() {
 						<div>
 							<label
 								htmlFor="email"
-								className="block text-sm font-medium text-stone-700 dark:text-stone-300 mb-1.5"
+								className="block text-sm font-medium text-warmgray-700 dark:text-warmgray-300 mb-1.5"
 							>
 								Email
 							</label>
@@ -144,7 +144,7 @@ export default function Login() {
 						<div>
 							<label
 								htmlFor="password"
-								className="block text-sm font-medium text-stone-700 dark:text-stone-300 mb-1.5"
+								className="block text-sm font-medium text-warmgray-700 dark:text-warmgray-300 mb-1.5"
 							>
 								Password
 							</label>
@@ -159,7 +159,7 @@ export default function Login() {
 							<div className="mt-1.5 text-right">
 								<Link
 									to="/forgot-password"
-									className="text-sm text-stone-500 dark:text-stone-400 hover:text-emerald-600 dark:hover:text-emerald-500 transition-colors"
+									className="text-sm text-warmgray-500 dark:text-warmgray-400 hover:text-teal-600 dark:hover:text-teal-500 transition-colors"
 								>
 									Forgot password?
 								</Link>
@@ -169,7 +169,7 @@ export default function Login() {
 						<button
 							type="submit"
 							disabled={loading}
-							className="w-full rounded-lg bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white py-2.5 text-sm font-medium transition-colors disabled:opacity-50 cursor-pointer mt-2"
+							className="w-full rounded-lg bg-teal-600 hover:bg-teal-700 active:bg-teal-800 text-white py-2.5 text-sm font-medium transition-colors disabled:opacity-50 cursor-pointer mt-2"
 						>
 							{loading ? "Signing in\u2026" : "Sign in"}
 						</button>
@@ -177,10 +177,10 @@ export default function Login() {
 
 					<div className="relative my-6">
 						<div className="absolute inset-0 flex items-center">
-							<div className="w-full border-t border-stone-200 dark:border-stone-700" />
+							<div className="w-full border-t border-warmgray-200 dark:border-warmgray-700" />
 						</div>
 						<div className="relative flex justify-center text-xs uppercase tracking-wide">
-							<span className="bg-white dark:bg-stone-900 px-3 text-stone-400">
+							<span className="bg-white dark:bg-warmgray-900 px-3 text-warmgray-400">
 								or
 							</span>
 						</div>
@@ -208,11 +208,11 @@ export default function Login() {
 					</div>
 				</div>
 
-				<p className="text-center text-sm text-stone-500 dark:text-stone-400 mt-6">
+				<p className="text-center text-sm text-warmgray-500 dark:text-warmgray-400 mt-6">
 					Don&apos;t have an account?{" "}
 					<Link
 						to="/signup"
-						className="text-emerald-600 dark:text-emerald-500 hover:underline font-medium"
+						className="text-teal-600 dark:text-teal-500 hover:underline font-medium"
 					>
 						Sign up
 					</Link>

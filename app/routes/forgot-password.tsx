@@ -44,20 +44,20 @@ export default function ForgotPassword() {
 
 	if (sent) {
 		return (
-			<div className="min-h-screen flex flex-col items-center justify-center bg-stone-50 dark:bg-gray-950 px-4">
+			<div className="min-h-screen flex flex-col items-center justify-center bg-warmgray-50 dark:bg-warmgray-950 px-4">
 				<div className="w-full max-w-sm animate-fade-in">
-					<h1 className="font-serif italic text-4xl text-center text-stone-800 dark:text-stone-200 mb-10">
+					<h1 className="font-serif italic text-4xl text-center text-warmgray-800 dark:text-warmgray-200 mb-10">
 						dear applicant
 					</h1>
 
-					<div className="bg-white dark:bg-stone-900 rounded-2xl p-8 shadow-xs border border-stone-200/80 dark:border-stone-800 text-center">
+					<div className="bg-white dark:bg-warmgray-900 rounded-2xl p-8 shadow-xs border border-warmgray-200/80 dark:border-warmgray-800 text-center">
 						<div className="text-4xl mb-4">&#9993;</div>
-						<h2 className="text-lg font-semibold text-stone-900 dark:text-stone-100 mb-2">
+						<h2 className="text-lg font-semibold text-warmgray-900 dark:text-warmgray-100 mb-2">
 							Check your email
 						</h2>
-						<p className="text-sm text-stone-600 dark:text-stone-400">
+						<p className="text-sm text-warmgray-600 dark:text-warmgray-400">
 							If an account exists for{" "}
-							<span className="font-medium text-stone-800 dark:text-stone-200">
+							<span className="font-medium text-warmgray-800 dark:text-warmgray-200">
 								{email}
 							</span>
 							, we sent a password reset link. Check your inbox and spam
@@ -65,10 +65,10 @@ export default function ForgotPassword() {
 						</p>
 					</div>
 
-					<p className="text-center text-sm text-stone-500 dark:text-stone-400 mt-6">
+					<p className="text-center text-sm text-warmgray-500 dark:text-warmgray-400 mt-6">
 						<Link
 							to="/login"
-							className="text-emerald-600 dark:text-emerald-500 hover:underline font-medium"
+							className="text-teal-600 dark:text-teal-500 hover:underline font-medium"
 						>
 							Back to sign in
 						</Link>
@@ -79,17 +79,17 @@ export default function ForgotPassword() {
 	}
 
 	return (
-		<div className="min-h-screen flex flex-col items-center justify-center bg-stone-50 dark:bg-gray-950 px-4">
+		<div className="min-h-screen flex flex-col items-center justify-center bg-warmgray-50 dark:bg-warmgray-950 px-4">
 			<div className="w-full max-w-sm animate-fade-in">
-				<h1 className="font-serif italic text-4xl text-center text-stone-800 dark:text-stone-200 mb-10">
+				<h1 className="font-serif italic text-4xl text-center text-warmgray-800 dark:text-warmgray-200 mb-10">
 					dear applicant
 				</h1>
 
-				<div className="bg-white dark:bg-stone-900 rounded-2xl p-8 shadow-xs border border-stone-200/80 dark:border-stone-800">
-					<h2 className="text-lg font-semibold text-stone-900 dark:text-stone-100 mb-2">
+				<div className="bg-white dark:bg-warmgray-900 rounded-2xl p-8 shadow-xs border border-warmgray-200/80 dark:border-warmgray-800">
+					<h2 className="text-lg font-semibold text-warmgray-900 dark:text-warmgray-100 mb-2">
 						Forgot password
 					</h2>
-					<p className="text-sm text-stone-600 dark:text-stone-400 mb-6">
+					<p className="text-sm text-warmgray-600 dark:text-warmgray-400 mb-6">
 						Enter your email and we&apos;ll send you a link to reset your
 						password.
 					</p>
@@ -104,7 +104,7 @@ export default function ForgotPassword() {
 						<div>
 							<label
 								htmlFor="email"
-								className="block text-sm font-medium text-stone-700 dark:text-stone-300 mb-1.5"
+								className="block text-sm font-medium text-warmgray-700 dark:text-warmgray-300 mb-1.5"
 							>
 								Email
 							</label>
@@ -122,17 +122,17 @@ export default function ForgotPassword() {
 						<button
 							type="submit"
 							disabled={loading}
-							className="w-full rounded-lg bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white py-2.5 text-sm font-medium transition-colors disabled:opacity-50 cursor-pointer mt-2"
+							className="w-full rounded-lg bg-teal-600 hover:bg-teal-700 active:bg-teal-800 text-white py-2.5 text-sm font-medium transition-colors disabled:opacity-50 cursor-pointer mt-2"
 						>
 							{loading ? "Sending\u2026" : "Send reset link"}
 						</button>
 					</form>
 				</div>
 
-				<p className="text-center text-sm text-stone-500 dark:text-stone-400 mt-6">
+				<p className="text-center text-sm text-warmgray-500 dark:text-warmgray-400 mt-6">
 					<Link
 						to="/login"
-						className="text-emerald-600 dark:text-emerald-500 hover:underline font-medium"
+						className="text-teal-600 dark:text-teal-500 hover:underline font-medium"
 					>
 						Back to sign in
 					</Link>

@@ -54,23 +54,23 @@ export default function ResetPassword() {
 
 	if (success) {
 		return (
-			<div className="min-h-screen flex flex-col items-center justify-center bg-stone-50 dark:bg-gray-950 px-4">
+			<div className="min-h-screen flex flex-col items-center justify-center bg-warmgray-50 dark:bg-warmgray-950 px-4">
 				<div className="w-full max-w-sm animate-fade-in">
-					<h1 className="font-serif italic text-4xl text-center text-stone-800 dark:text-stone-200 mb-10">
+					<h1 className="font-serif italic text-4xl text-center text-warmgray-800 dark:text-warmgray-200 mb-10">
 						dear applicant
 					</h1>
 
-					<div className="bg-white dark:bg-stone-900 rounded-2xl p-8 shadow-xs border border-stone-200/80 dark:border-stone-800 text-center">
-						<h2 className="text-lg font-semibold text-stone-900 dark:text-stone-100 mb-2">
+					<div className="bg-white dark:bg-warmgray-900 rounded-2xl p-8 shadow-xs border border-warmgray-200/80 dark:border-warmgray-800 text-center">
+						<h2 className="text-lg font-semibold text-warmgray-900 dark:text-warmgray-100 mb-2">
 							Password reset
 						</h2>
-						<p className="text-sm text-stone-600 dark:text-stone-400 mb-6">
+						<p className="text-sm text-warmgray-600 dark:text-warmgray-400 mb-6">
 							Your password has been updated. You can now sign in with your
 							new password.
 						</p>
 						<Link
 							to="/login"
-							className="inline-block w-full rounded-lg bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white py-2.5 text-sm font-medium transition-colors text-center"
+							className="inline-block w-full rounded-lg bg-teal-600 hover:bg-teal-700 active:bg-teal-800 text-white py-2.5 text-sm font-medium transition-colors text-center"
 						>
 							Sign in
 						</Link>
@@ -82,32 +82,32 @@ export default function ResetPassword() {
 
 	if (!token) {
 		return (
-			<div className="min-h-screen flex flex-col items-center justify-center bg-stone-50 dark:bg-gray-950 px-4">
+			<div className="min-h-screen flex flex-col items-center justify-center bg-warmgray-50 dark:bg-warmgray-950 px-4">
 				<div className="w-full max-w-sm animate-fade-in">
-					<h1 className="font-serif italic text-4xl text-center text-stone-800 dark:text-stone-200 mb-10">
+					<h1 className="font-serif italic text-4xl text-center text-warmgray-800 dark:text-warmgray-200 mb-10">
 						dear applicant
 					</h1>
 
-					<div className="bg-white dark:bg-stone-900 rounded-2xl p-8 shadow-xs border border-stone-200/80 dark:border-stone-800 text-center">
-						<h2 className="text-lg font-semibold text-stone-900 dark:text-stone-100 mb-2">
+					<div className="bg-white dark:bg-warmgray-900 rounded-2xl p-8 shadow-xs border border-warmgray-200/80 dark:border-warmgray-800 text-center">
+						<h2 className="text-lg font-semibold text-warmgray-900 dark:text-warmgray-100 mb-2">
 							Invalid reset link
 						</h2>
-						<p className="text-sm text-stone-600 dark:text-stone-400 mb-6">
+						<p className="text-sm text-warmgray-600 dark:text-warmgray-400 mb-6">
 							This password reset link is invalid or has expired. Please
 							request a new one.
 						</p>
 						<Link
 							to="/forgot-password"
-							className="inline-block w-full rounded-lg bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white py-2.5 text-sm font-medium transition-colors text-center"
+							className="inline-block w-full rounded-lg bg-teal-600 hover:bg-teal-700 active:bg-teal-800 text-white py-2.5 text-sm font-medium transition-colors text-center"
 						>
 							Request new link
 						</Link>
 					</div>
 
-					<p className="text-center text-sm text-stone-500 dark:text-stone-400 mt-6">
+					<p className="text-center text-sm text-warmgray-500 dark:text-warmgray-400 mt-6">
 						<Link
 							to="/login"
-							className="text-emerald-600 dark:text-emerald-500 hover:underline font-medium"
+							className="text-teal-600 dark:text-teal-500 hover:underline font-medium"
 						>
 							Back to sign in
 						</Link>
@@ -118,14 +118,14 @@ export default function ResetPassword() {
 	}
 
 	return (
-		<div className="min-h-screen flex flex-col items-center justify-center bg-stone-50 dark:bg-gray-950 px-4">
+		<div className="min-h-screen flex flex-col items-center justify-center bg-warmgray-50 dark:bg-warmgray-950 px-4">
 			<div className="w-full max-w-sm animate-fade-in">
-				<h1 className="font-serif italic text-4xl text-center text-stone-800 dark:text-stone-200 mb-10">
+				<h1 className="font-serif italic text-4xl text-center text-warmgray-800 dark:text-warmgray-200 mb-10">
 					dear applicant
 				</h1>
 
-				<div className="bg-white dark:bg-stone-900 rounded-2xl p-8 shadow-xs border border-stone-200/80 dark:border-stone-800">
-					<h2 className="text-lg font-semibold text-stone-900 dark:text-stone-100 mb-6">
+				<div className="bg-white dark:bg-warmgray-900 rounded-2xl p-8 shadow-xs border border-warmgray-200/80 dark:border-warmgray-800">
+					<h2 className="text-lg font-semibold text-warmgray-900 dark:text-warmgray-100 mb-6">
 						Reset password
 					</h2>
 
@@ -139,7 +139,7 @@ export default function ResetPassword() {
 						<div>
 							<label
 								htmlFor="new-password"
-								className="block text-sm font-medium text-stone-700 dark:text-stone-300 mb-1.5"
+								className="block text-sm font-medium text-warmgray-700 dark:text-warmgray-300 mb-1.5"
 							>
 								New password
 							</label>
@@ -158,7 +158,7 @@ export default function ResetPassword() {
 						<div>
 							<label
 								htmlFor="confirm-password"
-								className="block text-sm font-medium text-stone-700 dark:text-stone-300 mb-1.5"
+								className="block text-sm font-medium text-warmgray-700 dark:text-warmgray-300 mb-1.5"
 							>
 								Confirm password
 							</label>
@@ -177,17 +177,17 @@ export default function ResetPassword() {
 						<button
 							type="submit"
 							disabled={loading}
-							className="w-full rounded-lg bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white py-2.5 text-sm font-medium transition-colors disabled:opacity-50 cursor-pointer mt-2"
+							className="w-full rounded-lg bg-teal-600 hover:bg-teal-700 active:bg-teal-800 text-white py-2.5 text-sm font-medium transition-colors disabled:opacity-50 cursor-pointer mt-2"
 						>
 							{loading ? "Resetting\u2026" : "Reset password"}
 						</button>
 					</form>
 				</div>
 
-				<p className="text-center text-sm text-stone-500 dark:text-stone-400 mt-6">
+				<p className="text-center text-sm text-warmgray-500 dark:text-warmgray-400 mt-6">
 					<Link
 						to="/login"
-						className="text-emerald-600 dark:text-emerald-500 hover:underline font-medium"
+						className="text-teal-600 dark:text-teal-500 hover:underline font-medium"
 					>
 						Back to sign in
 					</Link>
