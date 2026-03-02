@@ -11,13 +11,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ```bash
 pnpm dev              # Dev server with HMR at http://localhost:5173
 pnpm build            # Production build (runs react-router build)
+pnpm test             # Run Vitest unit tests
 pnpm preview          # Preview production build locally
 pnpm deploy           # Build + deploy to Cloudflare Workers
 pnpm typecheck        # TypeScript checking + React Router typegen
 pnpm cf-typegen       # Generate Cloudflare Workers types
 ```
 
-No test runner or linter is configured yet.
+No linter is configured yet.
 
 ## Architecture
 

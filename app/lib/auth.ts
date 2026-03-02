@@ -6,7 +6,7 @@ import { db } from "~/db";
 
 const resend = new Resend(env.RESEND_API_KEY);
 
-function escapeHtml(str: string): string {
+export function escapeHtml(str: string): string {
 	return str
 		.replace(/&/g, "&amp;")
 		.replace(/</g, "&lt;")
