@@ -1,3 +1,4 @@
+import type { BatchItem } from "drizzle-orm/batch";
 import { eq, and, notInArray } from "drizzle-orm";
 import { db } from "~/db";
 import { jobListing } from "~/db/schema";
@@ -108,7 +109,9 @@ export async function syncSimplifyJobs(): Promise<{ synced: number; error?: stri
 		});
 
 		if (statements.length > 0) {
-			await db.batch(statements as [typeof statements[0], ...typeof statements[]]);
+			await db.batch(
+				statements as unknown as [BatchItem<"sqlite">, ...BatchItem<"sqlite">[]]
+			);
 			synced += statements.length;
 		}
 	}
