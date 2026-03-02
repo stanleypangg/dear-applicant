@@ -156,6 +156,14 @@ export default function Login() {
 								required
 								className={inputClass}
 							/>
+							<div className="mt-1.5 text-right">
+								<Link
+									to="/forgot-password"
+									className="text-sm text-stone-500 dark:text-stone-400 hover:text-emerald-600 dark:hover:text-emerald-500 transition-colors"
+								>
+									Forgot password?
+								</Link>
+							</div>
 						</div>
 
 						<button

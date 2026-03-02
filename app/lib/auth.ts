@@ -39,16 +39,33 @@ export const auth = betterAuth({
 	emailAndPassword: {
 		enabled: true,
 		requireEmailVerification: true,
+		sendResetPassword: async ({ user, url }) => {
+			const { error } = await resend.emails.send({
+				from: env.EMAIL_FROM,
+				to: user.email,
+				subject: "Reset your password — dear applicant",
+				html: `<p>Hi ${escapeHtml(user.name)},</p><p>Click the link below to reset your password:</p><p><a href="${url}">${escapeHtml(url)}</a></p>`,
+			});
+			if (error) {
+				console.error("Failed to send password reset email:", error);
+				throw new Error("Failed to send password reset email");
+			}
+		},
+		revokeSessionsOnPasswordReset: true,
 	},
 	emailVerification: {
 		autoSignInAfterVerification: true,
 		sendVerificationEmail: async ({ user, url }) => {
-			await resend.emails.send({
+			const { error } = await resend.emails.send({
 				from: env.EMAIL_FROM,
 				to: user.email,
 				subject: "Verify your email — dear applicant",
 				html: `<p>Hi ${escapeHtml(user.name)},</p><p>Click the link below to verify your email address:</p><p><a href="${url}">${escapeHtml(url)}</a></p>`,
 			});
+			if (error) {
+				console.error("Failed to send verification email:", error);
+				throw new Error("Failed to send verification email");
+			}
 		},
 	},
 	trustedOrigins: [env.ORIGIN],
@@ -64,6 +81,10 @@ export const auth = betterAuth({
 		max: 100,
 		customRules: {
 			"/send-verification-email": {
+				window: 60,
+				max: 1,
+			},
+			"/request-password-reset": {
 				window: 60,
 				max: 1,
 			},

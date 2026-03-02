@@ -57,7 +57,11 @@ export default function Signup() {
 				callbackURL: "/dashboard",
 			});
 			if (result.error) {
-				setError(result.error.message ?? "Sign up failed");
+				if (result.error.status === 422) {
+					setError("exists");
+				} else {
+					setError(result.error.message ?? "Sign up failed");
+				}
 			} else {
 				setSignedUp(true);
 				startCountdown();
@@ -155,7 +159,19 @@ export default function Signup() {
 
 					{error && (
 						<div className="mb-4 p-3 rounded-lg bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400 text-sm">
-							{error}
+							{error === "exists" ? (
+								<>
+									An account with this email already exists.{" "}
+									<Link
+										to="/login"
+										className="font-medium underline hover:text-red-700 dark:hover:text-red-300"
+									>
+										Sign in instead
+									</Link>
+								</>
+							) : (
+								error
+							)}
 						</div>
 					)}
 
