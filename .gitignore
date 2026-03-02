@@ -19,3 +19,4 @@ worker-configuration.d.ts
 
 # Claude Code
 .claude/worktrees/
+.worktrees/
